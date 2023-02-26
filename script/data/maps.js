@@ -1,4 +1,4 @@
-import GameEntity from "../classes/GameEntity.js"
+import Character from "../classes/Character.js"
 
 const maps = {
   DemoRoom: {
@@ -7,11 +7,12 @@ const maps = {
       top: "images/maps/DemoUpper.png"
     }),
     gameEntities: {
-      hero: new GameEntity({ 
+      hero: new Character({ 
         position: { x: 4, y: 6 }, 
-        src: "images/characters/people/hero.png"
+        src: "images/characters/people/hero.png",
+        isBeingControlled: true
       }),
-      npc: new GameEntity({
+      npc: new Character({
         position: { x: 1, y: 8 },
         src: "images/characters/people/npc1.png"
       })

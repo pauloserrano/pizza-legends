@@ -1,4 +1,5 @@
 import maps from "../data/maps.js"
+import KeyBindings from "./KeyBindings.js"
 import Map from "./Map.js"
 
 export default class Overworld {
@@ -7,6 +8,7 @@ export default class Overworld {
    this.canvas = this.element.querySelector(".game-canvas")
    this.ctx = this.canvas.getContext("2d")
    this.map = new Map(maps.DemoRoom)
+   this.controls = new KeyBindings()
  }
 
  startGameLoop() {
@@ -16,6 +18,9 @@ export default class Overworld {
     
     Object.values(this.map.gameEntities).forEach(gameEntity => {
       gameEntity.sprite.draw(this.ctx)
+      gameEntity.update({
+        currentInput: this.controls.currentInput
+      })
     })
 
     this.map.drawTopLayer(this.ctx)
@@ -23,10 +28,11 @@ export default class Overworld {
     requestAnimationFrame(step)
   }
 
+  this.controls.init()
   step()
  }
 
- init() {
+ init() {  
   this.startGameLoop()
  }
 }

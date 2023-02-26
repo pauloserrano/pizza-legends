@@ -26,8 +26,8 @@ export default class Sprite {
 
   draw(ctx) {
     const position = {
-      x: (this.gameEntity.position.x * FRAME_PIXEL.x) - NUDGE.x,
-      y: (this.gameEntity.position.y * FRAME_PIXEL.y) - NUDGE.y
+      x: this.gameEntity.position.x - NUDGE.x,
+      y: this.gameEntity.position.y - NUDGE.y
     }
 
     if (this.isShadowLoaded) {
