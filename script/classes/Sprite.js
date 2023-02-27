@@ -1,4 +1,5 @@
 import { defaultAnimations } from "../data/animations.js"
+import { screenCenter } from "../utils.js"
 
 export default class Sprite {
   constructor({ gameEntity, src, animations, currentAnimation, currentAnimationFrame, animationFrameLimit }) {
@@ -48,7 +49,7 @@ export default class Sprite {
     }
   }
 
-  draw(ctx) {
+  draw(ctx, cameraFocus) {
     const NUDGE = { x: 8, y: 18 }
     const imgSize = { x: 32, y: 32 }
     const imgCut = { 
@@ -59,8 +60,8 @@ export default class Sprite {
     }
 
     const position = {
-      x: this.gameEntity.position.x - NUDGE.x,
-      y: this.gameEntity.position.y - NUDGE.y
+      x: this.gameEntity.position.x + screenCenter.x - cameraFocus.position.x - NUDGE.x,
+      y: this.gameEntity.position.y + screenCenter.y - cameraFocus.position.y - NUDGE.y
     }
 
     if (this.isShadowLoaded) {

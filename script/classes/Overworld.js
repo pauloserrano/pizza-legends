@@ -9,22 +9,28 @@ export default class Overworld {
    this.ctx = this.canvas.getContext("2d")
    this.map = new Map(maps.DemoRoom)
    this.controls = new KeyBindings()
+   this.cameraFocus = this.map.gameEntities.find(entity => entity.isBeingControlled)
  }
 
  startGameLoop() {
   const step = () => {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
-    this.map.drawBottomLayer(this.ctx)
-    
-    Object.values(this.map.gameEntities).forEach(gameEntity => {
-      gameEntity.sprite.draw(this.ctx)
-      gameEntity.update({
-        currentInput: this.controls.currentInput
+
+    this.map.gameEntities.forEach(gameEntity => {
+      gameEntity.update({ 
+        currentInput: this.controls.currentInput,
+        map: this.map
       })
     })
 
-    this.map.drawTopLayer(this.ctx)
+    this.map.drawBottomLayer(this.ctx, this.cameraFocus)
+    
+    this.map.gameEntities.forEach(gameEntity => {
+      gameEntity.sprite.draw(this.ctx, this.cameraFocus)
+    })
 
+    this.map.drawTopLayer(this.ctx, this.cameraFocus)
+    
     requestAnimationFrame(step)
   }
 
