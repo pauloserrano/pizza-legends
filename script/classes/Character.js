@@ -1,10 +1,12 @@
 import GameEntity from "./GameEntity.js";
+import { capitalize } from "../utils.js";
 
 export default class Character extends GameEntity {
   constructor({ position, src, isBeingControlled }){
     super({ position, src })
     
-    this.remainingMovement = 0
+    this.movementLimit = 16
+    this.movementProgress = this.movementLimit
     this.isBeingControlled = isBeingControlled || false
 
     this.directionMapping = {
@@ -16,22 +18,38 @@ export default class Character extends GameEntity {
   }
 
   update({ currentInput }) {
+    const validInput = currentInput !== undefined
+    const isCharacterMoving = this.movementProgress < this.movementLimit
+    
     this.updatePosition()
-
-    if (currentInput && this.remainingMovement === 0 && this.isBeingControlled){
+    this.updateSprite({ currentInput })
+    
+    if (validInput && !isCharacterMoving && this.isBeingControlled){
       this.direction = currentInput
-      this.remainingMovement = 16
+      this.movementProgress = 0
+    }
+  }
+
+  updateSprite({ currentInput }) {
+    const validInput = currentInput !== undefined
+    const isCharacterMoving = this.movementProgress < this.movementLimit
+    
+    if (!validInput && !isCharacterMoving && this.isBeingControlled){
+      this.sprite.setCurrentAnimation(`idle${capitalize(this.direction)}`)
+    
+    } else if (isCharacterMoving && this.isBeingControlled) {
+      this.sprite.setCurrentAnimation(`walk${capitalize(this.direction)}`)
     }
   }
 
   updatePosition() {
-    const isMoving = this.remainingMovement > 0
-    
-    if (isMoving) {
+    const isCharacterMoving = this.movementProgress < this.movementLimit
+        
+    if (isCharacterMoving) {
       const [axis, movement] = this.directionMapping[this.direction]
       
       this.position[axis] += movement
-      this.remainingMovement--
+      this.movementProgress++
     }
   }
 }

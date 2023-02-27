@@ -1,14 +1,7 @@
-const defaultAnimations = {
-  idleDown: [ [0, 0] ]
-}
-
-const imgCut = { xStart: 0, xEnd: 32, yStart: 0, yEnd: 32 }
-const imgSize = { x: 32, y: 32 }
-const FRAME_PIXEL = { x: 16, y: 16 }
-const NUDGE = { x: 8, y: 18 }
+import { defaultAnimations } from "../data/animations.js"
 
 export default class Sprite {
-  constructor({ gameEntity, src, animations, currentAnimation, currentAnimationFrame }) {
+  constructor({ gameEntity, src, animations, currentAnimation, currentAnimationFrame, animationFrameLimit }) {
     this.gameEntity = gameEntity
 
     this.image = new Image()
@@ -20,11 +13,51 @@ export default class Sprite {
     this.shadow.onload = () => this.isShadowLoaded = true
     
     this.animations = animations || defaultAnimations
-    this.currentAnimation = currentAnimation || "idleDown"
+    this.currentAnimation = currentAnimation || "idleUp"
     this.currentAnimationFrame = currentAnimationFrame || 0
+
+    this.animationFrameLimit = animationFrameLimit || 8
+    this.animationFrameProgress = 0
+  }
+
+  get currentFrame() {
+    return this.animations[this.currentAnimation][this.currentAnimationFrame]
+  }
+
+  setCurrentAnimation(animation) {
+    if (animation === this.currentAnimation){
+      return
+    }
+
+    this.currentAnimation = animation
+    this.currentAnimationFrame = 0
+    this.animationFrameProgress = 0
+  }
+
+  updateAnimation() {
+    if (this.animationFrameProgress < this.animationFrameLimit){
+      this.animationFrameProgress++
+      return
+    }
+    
+    this.animationFrameProgress = 0
+    this.currentAnimationFrame++
+
+    if (this.currentFrame === undefined){
+      this.currentAnimationFrame = 0
+    }
   }
 
   draw(ctx) {
+    const NUDGE = { x: 8, y: 18 }
+    const imgSize = { x: 32, y: 32 }
+    const imgCut = { 
+      xStart: this.currentFrame.x * 32, 
+      yStart: this.currentFrame.y * 32, 
+      xEnd: imgSize.x, 
+      yEnd: imgSize.y
+    }
+
     const position = {
       x: this.gameEntity.position.x - NUDGE.x,
       y: this.gameEntity.position.y - NUDGE.y
@@ -47,5 +80,7 @@ export default class Sprite {
         imgSize.y
       )
     }
+
+    this.updateAnimation()
   }
 }
