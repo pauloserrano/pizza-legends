@@ -23,8 +23,8 @@ export default class GameEvent {
 
   walk(resolve) {
     this.actor.startBehavior({ 
-      behavior: this.behavior, 
-      map: this.map 
+      behavior: { ...this.behavior, retry: true }, 
+      map: this.map,
     })
 
     const eventHandler = ({ detail }) => {

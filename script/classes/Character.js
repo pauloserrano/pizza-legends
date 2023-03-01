@@ -18,11 +18,17 @@ export default class Character extends GameEntity {
       case "walk":
         if (behavior.type === "walk"){
           const isMovementValid = map.isMovementValid({ position: this.position, direction: this.direction })
-    
-          if (isMovementValid) {
-            map.moveWall({ position: this.position, direction: this.direction })
-            this.movementProgress = 0
+          
+          if (!isMovementValid) {
+            behavior.retry && setTimeout(() => {
+              this.startBehavior({ behavior, map })
+            }, 500)
+            
+            return
           }
+
+          map.moveWall({ position: this.position, direction: this.direction })
+          this.movementProgress = 0
         }
         return
       case "stand":
@@ -41,8 +47,7 @@ export default class Character extends GameEntity {
     
     } else if (validInput && this.isBeingControlled){
       this.startBehavior({
-        behavior: "walk",
-        direction: currentInput,
+        behavior: { type: "walk", direction: currentInput },
         map
       })
     }
@@ -52,7 +57,6 @@ export default class Character extends GameEntity {
 
   updateSprite() {
     const isCharacterMoving = this.movementProgress < this.movementLimit
-
     if (isCharacterMoving){
       this.sprite.setCurrentAnimation(`walk${capitalize(this.direction)}`)
       return
