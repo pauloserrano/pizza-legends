@@ -9,6 +9,12 @@ export default class GameEntity {
     }
     this.direction = direction || "down"
     this.sprite = new Sprite({ gameEntity: this, src })
+    this.isMounted = false
+  }
+
+  mount({ map }) {
+    this.isMounted = true
+    map.addWall({ position: this.position })
   }
 
   update() {

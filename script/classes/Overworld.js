@@ -3,9 +3,8 @@ import KeyBindings from "./KeyBindings.js"
 import Map from "./Map.js"
 
 export default class Overworld {
- constructor({ element }) {
-   this.element = element
-   this.canvas = this.element.querySelector(".game-canvas")
+ constructor() {
+   this.canvas = document.querySelector("canvas")
    this.ctx = this.canvas.getContext("2d")
    this.map = new Map(maps.DemoRoom)
    this.controls = new KeyBindings()
@@ -35,6 +34,7 @@ export default class Overworld {
   }
 
   this.controls.init()
+  this.map.mountObjects()
   step()
  }
 

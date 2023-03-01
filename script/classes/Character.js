@@ -11,20 +11,16 @@ export default class Character extends GameEntity {
     this.isBeingControlled = isBeingControlled || false
   }
 
-  startBehavior({ type, direction, map }) {
+  startBehavior({ behavior, direction, map }) {
     this.direction = direction
 
-    if (type === "walk"){
-      const isMovementValid = map.isMovementValid({ 
-        position: this.position, 
-        direction: this.direction
-      })
+    if (behavior === "walk"){
+      const isMovementValid = map.isMovementValid({ position: this.position, direction: this.direction })
 
-      if (!isMovementValid) {
-        return
+      if (isMovementValid) {
+        map.moveWall({ position: this.position, direction: this.direction })
+        this.movementProgress = 0
       }
-
-      this.movementProgress = 0
     }
   }
 
@@ -37,7 +33,7 @@ export default class Character extends GameEntity {
     
     } else if (validInput && this.isBeingControlled){
       this.startBehavior({
-        type: "walk",
+        behavior: "walk",
         direction: currentInput,
         map
       })

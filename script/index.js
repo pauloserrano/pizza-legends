@@ -1,11 +1,8 @@
 import Overworld from "./classes/Overworld.js"
 
-function init() {
-  const overworld = new Overworld({
-    element: document.querySelector(".game-container")
-  });
-  
+function run() {
+  const overworld = new Overworld();
   overworld.init();
 };
 
-init()
+run()

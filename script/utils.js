@@ -15,6 +15,15 @@ function formatToCoordinates(x, y) {
   return `${x}, ${y}`
 }
 
+function getNextPosition(position, direction) {
+  const [axis, movement] = directionMapping[direction]
+  const nextPosition = { ...position }
+
+  nextPosition[axis] += convertGridToPixels(movement)
+
+  return nextPosition
+}
+
 const screenCenter = {
   x: convertGridToPixels(10.5),
   y: convertGridToPixels(6)
@@ -30,6 +39,7 @@ const directionMapping = {
 export {
   convertGridToPixels,
   formatToCoordinates,
+  getNextPosition,
   directionMapping,
   screenCenter,
   capitalize,

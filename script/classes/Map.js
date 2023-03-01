@@ -1,4 +1,4 @@
-import { formatToCoordinates, convertGridToPixels, directionMapping, screenCenter } from "../utils.js"
+import { formatToCoordinates, convertGridToPixels, screenCenter, getNextPosition } from "../utils.js"
 
 export default class Map {
   constructor({ gameEntities, src, walls }) {
@@ -18,11 +18,27 @@ export default class Map {
     })
   }
 
-  isMovementValid({ position, direction }) {
-    const [axis, movement] = directionMapping[direction]
-    const nextPosition = { ...position }
+  mountObjects() {
+    this.gameEntities.forEach(entity => entity.mount({ map: this }))
+  }
 
-    nextPosition[axis] += convertGridToPixels(movement)
+  addWall({ position }) {
+    const wallPosition = formatToCoordinates(position.x, position.y)
+    this.walls[wallPosition] = true
+  }
+  
+  removeWall({ position }) {
+    const wallPosition = formatToCoordinates(position.x, position.y)
+    delete this.walls[wallPosition]
+  }
+
+  moveWall({ position, direction }) {
+    this.removeWall({ position })
+    this.addWall({ position: getNextPosition(position, direction) })
+  }
+
+  isMovementValid({ position, direction }) {
+    const nextPosition = getNextPosition(position, direction)
 
     return (this.walls[formatToCoordinates(nextPosition.x, nextPosition.y)] === undefined)
   }
