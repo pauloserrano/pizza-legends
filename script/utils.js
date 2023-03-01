@@ -1,8 +1,8 @@
-function convertGridToPixels(num) {
+export function convertGridToPixels(num) {
   return num * 16
 }
 
-function capitalize(str) {
+export function capitalize(str) {
   const arr = str.split(" ")
   let capitalizedStr = []
 
@@ -11,11 +11,11 @@ function capitalize(str) {
   return capitalizedStr.join(" ")
 }
 
-function formatToCoordinates(x, y) {
+export function formatToCoordinates(x, y) {
   return `${x}, ${y}`
 }
 
-function getNextPosition(position, direction) {
+export function getNextPosition(position, direction) {
   const [axis, movement] = directionMapping[direction]
   const nextPosition = { ...position }
 
@@ -24,23 +24,18 @@ function getNextPosition(position, direction) {
   return nextPosition
 }
 
-const screenCenter = {
+export const screenCenter = {
   x: convertGridToPixels(10.5),
   y: convertGridToPixels(6)
 }
 
-const directionMapping = {
+export const directionMapping = {
   up: ["y", -1],
   right: ["x", 1],
   down: ["y", 1],
   left: ["x", -1]
 }
 
-export {
-  convertGridToPixels,
-  formatToCoordinates,
-  getNextPosition,
-  directionMapping,
-  screenCenter,
-  capitalize,
+export function emitEvent(event, payload) {
+  document.dispatchEvent(new CustomEvent(event, { detail: payload }))
 }

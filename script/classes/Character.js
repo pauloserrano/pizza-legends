@@ -1,9 +1,9 @@
 import GameEntity from "./GameEntity.js";
-import { capitalize, directionMapping } from "../utils.js";
+import { capitalize, directionMapping, emitEvent } from "../utils.js";
 
 export default class Character extends GameEntity {
-  constructor({ position, src, isBeingControlled }){
-    super({ position, src })
+  constructor({ isBeingControlled, ...superConfig }){
+    super(superConfig)
     
     this.movementLimit = 16
     this.movementProgress = this.movementLimit
@@ -11,16 +11,24 @@ export default class Character extends GameEntity {
     this.isBeingControlled = isBeingControlled || false
   }
 
-  startBehavior({ behavior, direction, map }) {
-    this.direction = direction
+  startBehavior({ behavior, map }) {
+    this.direction = behavior.direction
 
-    if (behavior === "walk"){
-      const isMovementValid = map.isMovementValid({ position: this.position, direction: this.direction })
-
-      if (isMovementValid) {
-        map.moveWall({ position: this.position, direction: this.direction })
-        this.movementProgress = 0
-      }
+    switch(behavior.type){
+      case "walk":
+        if (behavior.type === "walk"){
+          const isMovementValid = map.isMovementValid({ position: this.position, direction: this.direction })
+    
+          if (isMovementValid) {
+            map.moveWall({ position: this.position, direction: this.direction })
+            this.movementProgress = 0
+          }
+        }
+        return
+      case "stand":
+        setTimeout(() => {
+          emitEvent("hasFinishedStanding", { actor: this })
+        }, behavior.time || 1000)
     }
   }
 
@@ -57,5 +65,10 @@ export default class Character extends GameEntity {
     const [axis, movement] = directionMapping[this.direction]
     this.position[axis] += movement
     this.movementProgress++
+
+    const hasFinishedMoving = this.movementProgress === this.movementLimit
+    if (hasFinishedMoving){
+      emitEvent("hasFinishedMoving", { actor: this })
+    }
   }
 }

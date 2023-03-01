@@ -3,6 +3,7 @@ import { formatToCoordinates, convertGridToPixels, screenCenter, getNextPosition
 export default class Map {
   constructor({ gameEntities, src, walls }) {
     this.gameEntities = gameEntities
+    this.isCutscenePlaying = false
     
     this.bottomLayer = new Image()
     this.bottomLayer.src = src.bottom
