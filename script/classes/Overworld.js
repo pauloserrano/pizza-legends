@@ -24,7 +24,9 @@ export default class Overworld {
 
     this.map.drawBottomLayer(this.ctx, this.cameraFocus)
     
-    this.map.gameEntities.forEach(gameEntity => {
+    this.map.gameEntities
+      .sort((a, b) => a.position.y - b.position.y)
+      .forEach(gameEntity => {
       gameEntity.sprite.draw(this.ctx, this.cameraFocus)
     })
 
