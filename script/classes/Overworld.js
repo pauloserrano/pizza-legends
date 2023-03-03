@@ -1,12 +1,11 @@
-import maps from "../data/maps.js"
+import { cutscenes, maps } from "../data/index.js"
 import KeyBindings from "./KeyBindings.js"
-import Map from "./Map.js"
 
 export default class Overworld {
  constructor() {
    this.canvas = document.querySelector("canvas")
    this.ctx = this.canvas.getContext("2d")
-   this.map = new Map(maps.DemoRoom)
+   this.map = maps.DemoRoom
    this.controls = new KeyBindings()
    this.cameraFocus = this.map.gameEntities.find(entity => entity.isBeingControlled)
  }
@@ -16,7 +15,7 @@ export default class Overworld {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height)
 
     this.map.gameEntities.forEach(gameEntity => {
-      gameEntity.update({ 
+      gameEntity.update({
         currentInput: this.controls.currentInput,
         map: this.map
       })
@@ -42,5 +41,6 @@ export default class Overworld {
 
  init() {  
   this.startGameLoop()
+  this.map.startCutscene(cutscenes.demo)
  }
 }

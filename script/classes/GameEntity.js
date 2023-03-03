@@ -20,13 +20,9 @@ export default class GameEntity {
   mount({ map }) {
     this.isMounted = true
     map.addWall({ position: this.position })
-
-    if (this.behaviorLoop === null || map.isCutscenePlaying){
-      return
-    }
     
     setTimeout(() => {
-      this.startBehaviorEvent({ map })
+      this.startBehaviorLoop({ map })
     }, 100)
   }
   
@@ -36,21 +32,23 @@ export default class GameEntity {
     }
   }
 
-  async startBehaviorEvent({ map }) {
-    const eventHandler = new GameEvent({ 
-      behavior: this.currentBehavior, 
-      actor: this, 
-      map 
-    })
+  async startBehaviorLoop({ map }) {
+    if (!this.behaviorLoop || map.isCutscenePlaying){
+      return
+    }
 
-    await eventHandler.run()
+    await new GameEvent({
+      ...this.currentBehavior,
+      actor: this,
+      map
+    }).run()
 
     this.currentBehaviorIndex++
     if (this.currentBehavior === undefined){
       this.currentBehaviorIndex = 0
     }
 
-    this.startBehaviorEvent({ map })
+    this.startBehaviorLoop({ map })
   }
 
   update() {

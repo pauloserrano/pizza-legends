@@ -1,4 +1,4 @@
-import { defaultAnimations } from "../data/animations.js"
+import { animations as defaultAnimations } from "../data/index.js"
 import { screenCenter } from "../utils.js"
 
 export default class Sprite {

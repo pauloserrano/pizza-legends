@@ -1,5 +1,5 @@
+import { capitalize, directionMapping, emitEvent, CUSTOM_EVENTS } from "../utils.js";
 import GameEntity from "./GameEntity.js";
-import { capitalize, directionMapping, emitEvent } from "../utils.js";
 
 export default class Character extends GameEntity {
   constructor({ isBeingControlled, ...superConfig }){
@@ -16,25 +16,25 @@ export default class Character extends GameEntity {
 
     switch(behavior.type){
       case "walk":
-        if (behavior.type === "walk"){
-          const isMovementValid = map.isMovementValid({ position: this.position, direction: this.direction })
+        const isMovementValid = map.isMovementValid({ position: this.position, direction: this.direction })
+        
+        if (!isMovementValid) {
+          behavior.retry && setTimeout(() => {
+            this.startBehavior({ behavior, map })
+          }, 1000)
           
-          if (!isMovementValid) {
-            behavior.retry && setTimeout(() => {
-              this.startBehavior({ behavior, map })
-            }, 500)
-            
-            return
-          }
-
-          map.moveWall({ position: this.position, direction: this.direction })
-          this.movementProgress = 0
+          return
         }
-        return
+
+        map.moveWall({ position: this.position, direction: this.direction })
+        this.movementProgress = 0
+        break
+
       case "stand":
         setTimeout(() => {
-          emitEvent("hasFinishedStanding", { actor: this })
-        }, behavior.time || 1000)
+          emitEvent(CUSTOM_EVENTS.FINISHED_STANDING, { actor: this })
+        }, behavior.time || 100)
+        break
     }
   }
 
@@ -45,7 +45,7 @@ export default class Character extends GameEntity {
     if (isCharacterMoving) {
       this.updatePosition()
     
-    } else if (validInput && this.isBeingControlled){
+    } else if (validInput && this.isBeingControlled && !map.isCutscenePlaying){
       this.startBehavior({
         behavior: { type: "walk", direction: currentInput },
         map
@@ -72,7 +72,7 @@ export default class Character extends GameEntity {
 
     const hasFinishedMoving = this.movementProgress === this.movementLimit
     if (hasFinishedMoving){
-      emitEvent("hasFinishedMoving", { actor: this })
+      emitEvent(CUSTOM_EVENTS.FINISHED_MOVING, { actor: this })
     }
   }
 }

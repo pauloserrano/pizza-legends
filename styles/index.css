@@ -1,5 +1,14 @@
+:root {
+  --color-border: #291D4D;
+  --color-dialogue-bg: #FFF3B4;
+  --color-menu-bg: #FFE8D2;
+  --color-menu-border: #A48465;
+  --color-menu-font: #3A160D;
+  --color-menu-bg-selected: #7FC2FF;
+}
+
 * {
-  box-sizing:border-box;
+  box-sizing: border-box;
 }
 
 body {
@@ -10,7 +19,7 @@ body {
 }
 
 .game-container {
-  position: relative; 
+  position: relative;
   width: 352px;
   height: 198px;
   margin: 0 auto;
@@ -20,4 +29,31 @@ body {
 
 .game-container canvas {
   image-rendering: pixelated;
+}
+
+.dialogue-container {
+  height: 5em;
+  position: absolute;
+  inset: auto 1em 1em 1em;
+  padding: 1em;
+  font-size: 8px;
+  border-radius: 5px;
+  background-color: #FFE8D2;
+  font-family: monospace;
+}
+
+.btn-next {
+  position: absolute;
+  inset: auto 0 0 auto;
+  padding: 0.25em;
+  margin: 0.25em;
+  border-radius: 50%;
+  cursor: pointer;
+  transition: .1s all linear;
+}
+
+.btn-next:hover, .btn-next:focus {
+  background-color: #fff;
+  border-color: bisque;
+  outline: none;
 }

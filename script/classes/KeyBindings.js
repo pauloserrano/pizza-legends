@@ -1,7 +1,10 @@
+import { emitEvent, CUSTOM_EVENTS } from "../utils.js"
+
 export default class KeyBindings {
   constructor() {
+    this.onGoingAction = false
     this.heldKeys = []
-    this.keyMapping = {
+    this.directionalMapping = {
       "KeyW": "up",
       "KeyD": "right",
       "KeyS": "down",
@@ -11,6 +14,10 @@ export default class KeyBindings {
       "ArrowDown": "down",
       "ArrowLeft": "left",
     }
+    this.actionMapping = {
+      "Space": "confirm",
+      "Enter": "confirm"
+    }
   }
 
   get currentInput() {
@@ -19,19 +26,33 @@ export default class KeyBindings {
 
   init() {
     document.addEventListener("keydown", (e) => {
-      const direction = this.keyMapping[e.code]
+      const direction = this.directionalMapping[e.code]
       
-      if (direction && !this.heldKeys.includes(direction)){
+      if (direction && !this.heldKeys.includes(direction)) {
         this.heldKeys.push(direction)
+        return
+      }
+
+      const action = this.actionMapping[e.code]
+
+      if (action && !this.onGoingAction) {
+        emitEvent(CUSTOM_EVENTS.PLAYER_CONFIRM)
+        this.onGoingAction = true
       }
     })
 
     document.addEventListener("keyup", (e) => {
-      const direction = this.keyMapping[e.code]
+      const direction = this.directionalMapping[e.code]
       const directionIndex = this.heldKeys.indexOf(direction)
       
-      if (directionIndex !== -1){
+      if (directionIndex !== -1) {
         this.heldKeys.splice(directionIndex, 1)
+        return
+      }
+
+      const action = this.actionMapping[e.code]
+      if (action) {
+        this.onGoingAction = false
       }
     })
   }

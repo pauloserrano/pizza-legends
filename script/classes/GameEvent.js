@@ -1,3 +1,6 @@
+import { CUSTOM_EVENTS } from "../utils.js"
+import DialogueText from "./DialogueText.js"
+
 export default class GameEvent {
   constructor({ actor, behavior, map }){
     this.behavior = behavior
@@ -13,12 +16,12 @@ export default class GameEvent {
 
     const eventHandler = ({ detail }) => {
       if (detail.actor === this.actor){
-        document.removeEventListener("hasFinishedStanding", eventHandler)
+        document.removeEventListener(CUSTOM_EVENTS.FINISHED_STANDING, eventHandler)
         resolve()
       }
     }
 
-    document.addEventListener("hasFinishedStanding", eventHandler)
+    document.addEventListener(CUSTOM_EVENTS.FINISHED_STANDING, eventHandler)
   }
 
   walk(resolve) {
@@ -29,12 +32,20 @@ export default class GameEvent {
 
     const eventHandler = ({ detail }) => {
       if (detail.actor === this.actor){
-        document.removeEventListener("hasFinishedMoving", eventHandler)
+        document.removeEventListener(CUSTOM_EVENTS.FINISHED_MOVING, eventHandler)
         resolve()
       }
     }
 
-    document.addEventListener("hasFinishedMoving", eventHandler)
+    document.addEventListener(CUSTOM_EVENTS.FINISHED_MOVING, eventHandler)
+  }
+
+  dialogue(resolve) {
+    const message = new DialogueText({
+      text: this.behavior.text,
+      resolve
+    })
+    message.init({ container: document.querySelector(".game-container") })
   }
 
   run() {

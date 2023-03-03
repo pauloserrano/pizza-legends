@@ -36,6 +36,12 @@ export const directionMapping = {
   left: ["x", -1]
 }
 
+export const CUSTOM_EVENTS = Object.freeze({
+  FINISHED_MOVING: "FinishedMoving",
+  FINISHED_STANDING: "FinishedStanding",
+  PLAYER_CONFIRM: "PlayerConfirm",
+})
+
 export function emitEvent(event, payload) {
   document.dispatchEvent(new CustomEvent(event, { detail: payload }))
 }

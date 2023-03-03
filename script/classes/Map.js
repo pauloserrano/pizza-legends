@@ -1,4 +1,5 @@
 import { formatToCoordinates, convertGridToPixels, screenCenter, getNextPosition } from "../utils.js"
+import GameEvent from "./GameEvent.js"
 
 export default class Map {
   constructor({ gameEntities, src, walls }) {
@@ -13,10 +14,25 @@ export default class Map {
 
     this.walls = {}
 
-    walls.forEach(([x, y])=> {
+    walls?.forEach(([x, y])=> {
       const wallPosition = formatToCoordinates(convertGridToPixels(x), convertGridToPixels(y))
       return this.walls[wallPosition] = true
     })
+  }
+
+  async startCutscene({ events }) {
+    this.isCutscenePlaying = true
+
+    for (const event of events) {
+      await new GameEvent({
+        ...event,
+        map: this
+      }).run()
+    }
+
+    this.isCutscenePlaying = false
+
+    this.gameEntities.forEach(entity => entity.startBehaviorLoop({ map: this }))
   }
 
   mountObjects() {
