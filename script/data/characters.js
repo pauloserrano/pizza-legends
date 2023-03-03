@@ -12,7 +12,7 @@ export const characters = {
   npc1: new Character({
     name: "NPC1",
     src: "images/characters/people/npc1.png",
-    position: { x: 1, y: 8 },
+    position: { x: 1, y: 6 },
     behaviorLoop: [
       new Behavior({ type: "stand", direction: "down", time: 5000 }),
       new Behavior({ type: "stand", direction: "left", time: 3000 }),
@@ -33,7 +33,7 @@ export const characters = {
       new Behavior({ type: "walk", direction: "down" }),
       new Behavior({ type: "stand", direction: "down", time: 5000 }),
       new Behavior({ type: "walk", direction: "left" }),
-      new Behavior({ type: "stand", direction: "left", time: 30000 }),
+      new Behavior({ type: "stand", direction: "left", time: 3000 }),
       new Behavior({ type: "walk", direction: "up" }),
       new Behavior({ type: "walk", direction: "up" }),
       new Behavior({ type: "stand", direction: "up", time: 4000 }),

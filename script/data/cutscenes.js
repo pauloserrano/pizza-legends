@@ -5,8 +5,6 @@ import { characters } from "./index.js"
 export const cutscenes = {
   demo: {
     events: [
-      new Behavior({ actor: characters.npc1, type: "walk", direction: "up" }),
-      new Behavior({ actor: characters.npc1, type: "walk", direction: "up" }),
       new Behavior({ actor: characters.npc1, type: "walk", direction: "right" }),
       new Behavior({ actor: characters.npc1, type: "walk", direction: "right" }),
       new Behavior({ actor: characters.npc1, type: "walk", direction: "right" }),

@@ -43,7 +43,8 @@ export default class GameEvent {
   dialogue(resolve) {
     const message = new DialogueText({
       text: this.behavior.text,
-      container: document.querySelector(".game-container")
+      container: document.querySelector(".game-container"),
+      resolve
     })
     message.init()
 
