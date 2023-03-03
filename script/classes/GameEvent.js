@@ -43,9 +43,17 @@ export default class GameEvent {
   dialogue(resolve) {
     const message = new DialogueText({
       text: this.behavior.text,
-      resolve
+      container: document.querySelector(".game-container")
     })
-    message.init({ container: document.querySelector(".game-container") })
+    message.init()
+
+    const eventHandler = () => {
+      document.removeEventListener(CUSTOM_EVENTS.PLAYER_CONFIRM, eventHandler)
+      message.close()
+      resolve()
+    }    
+    
+    document.addEventListener(CUSTOM_EVENTS.PLAYER_CONFIRM, eventHandler)
   }
 
   run() {

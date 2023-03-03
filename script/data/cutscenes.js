@@ -1,5 +1,5 @@
 import Behavior from "../models/Behavior.js"
-import { maps, characters } from "./index.js"
+import { characters } from "./index.js"
 
 // actor, behavior: { type, direction, time, retry=false }, map
 export const cutscenes = {

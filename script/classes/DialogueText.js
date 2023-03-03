@@ -1,10 +1,8 @@
-import { CUSTOM_EVENTS } from "../utils.js"
-
 export default class DialogueText {
-  constructor({ text, resolve }){
+  constructor({ text, container }){
     this.text = text
-    this.resolve = resolve
     this.element = null
+    this.container = container
   }
 
   createElement() {
@@ -26,12 +24,10 @@ export default class DialogueText {
 
   close() {
     this.element.remove()
-    this.resolve()
   }
 
-  init({ container }) {
+  init() {
     this.createElement()
-    container.appendChild(this.element)
-    document.addEventListener(CUSTOM_EVENTS.PLAYER_CONFIRM, () => this.close())
+    this.container.appendChild(this.element)
   }
 }
