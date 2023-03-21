@@ -3,7 +3,7 @@ import GameEvent from "./GameEvent.js"
 import Sprite from "./Sprite.js"
 
 export default class GameEntity {
-  constructor({ name, position, src, direction, behaviorLoop }) {
+  constructor({ name, position, src, direction, behaviorLoop, events }) {
     this.name = name || null
     this.position = {
       x: convertGridToPixels(position?.x || 0),
@@ -15,11 +15,13 @@ export default class GameEntity {
     
     this.behaviorLoop = behaviorLoop || null
     this.currentBehaviorIndex = 0
+
+    this.events = events || null
   }
 
   mount({ map }) {
     this.isMounted = true
-    map.addWall({ position: this.position })
+    map.addWall({ position: this.position, entity: this })
     
     setTimeout(() => {
       this.startBehaviorLoop({ map })

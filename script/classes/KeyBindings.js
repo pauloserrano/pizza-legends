@@ -2,8 +2,8 @@ import { emitEvent, CUSTOM_EVENTS } from "../utils.js"
 
 export default class KeyBindings {
   constructor() {
-    this.onGoingAction = false
     this.heldKeys = []
+    this.onGoingAction = undefined
     this.directionalMapping = {
       "KeyW": "up",
       "KeyD": "right",
@@ -15,13 +15,17 @@ export default class KeyBindings {
       "ArrowLeft": "left",
     }
     this.actionMapping = {
-      "Space": "confirm",
-      "Enter": "confirm"
+      "Space": "interact",
+      "Enter": "interact",
+      "KeyE": "interact"
     }
   }
 
   get currentInput() {
-    return this.heldKeys[this.heldKeys.length - 1]
+    return {
+      direction: this.heldKeys[this.heldKeys.length - 1],
+      action: this.onGoingAction
+    }
   }
 
   init() {
@@ -34,10 +38,9 @@ export default class KeyBindings {
       }
 
       const action = this.actionMapping[e.code]
-
       if (action && !this.onGoingAction) {
-        emitEvent(CUSTOM_EVENTS.PLAYER_CONFIRM)
-        this.onGoingAction = true
+        emitEvent(CUSTOM_EVENTS.PLAYER_INTERACT)
+        this.onGoingAction = action
       }
     })
 
@@ -52,7 +55,7 @@ export default class KeyBindings {
 
       const action = this.actionMapping[e.code]
       if (action) {
-        this.onGoingAction = false
+        this.onGoingAction = undefined
       }
     })
   }

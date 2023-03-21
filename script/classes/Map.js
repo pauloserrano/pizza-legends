@@ -24,6 +24,7 @@ export default class Map {
     this.isCutscenePlaying = true
 
     for (const event of events) {
+      console.log(event.behavior)
       await new GameEvent({
         ...event,
         map: this
@@ -31,7 +32,6 @@ export default class Map {
     }
 
     this.isCutscenePlaying = false
-
     this.gameEntities.forEach(entity => entity.startBehaviorLoop({ map: this }))
   }
 
@@ -39,9 +39,9 @@ export default class Map {
     this.gameEntities.forEach(entity => entity.mount({ map: this }))
   }
 
-  addWall({ position }) {
+  addWall({ position, entity }) {
     const wallPosition = formatToCoordinates(position.x, position.y)
-    this.walls[wallPosition] = true
+    this.walls[wallPosition] = entity || true
   }
   
   removeWall({ position }) {
@@ -49,15 +49,13 @@ export default class Map {
     delete this.walls[wallPosition]
   }
 
-  moveWall({ position, direction }) {
+  moveWall({ position, direction, entity }) {
     this.removeWall({ position })
-    this.addWall({ position: getNextPosition(position, direction) })
+    this.addWall({ position: getNextPosition(position, direction), entity })
   }
 
-  isMovementValid({ position, direction }) {
-    const nextPosition = getNextPosition(position, direction)
-
-    return (this.walls[formatToCoordinates(nextPosition.x, nextPosition.y)] === undefined)
+  checkSpace({ position }) {
+    return this.walls[formatToCoordinates(position.x, position.y)]
   }
 
   drawBottomLayer(ctx, cameraFocus) {

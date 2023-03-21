@@ -1,4 +1,4 @@
-import { capitalize, directionMapping, emitEvent, CUSTOM_EVENTS } from "../utils.js";
+import { capitalize, directionMapping, emitEvent, CUSTOM_EVENTS, getNextPosition } from "../utils.js";
 import GameEntity from "./GameEntity.js";
 
 export default class Character extends GameEntity {
@@ -16,7 +16,9 @@ export default class Character extends GameEntity {
 
     switch(behavior.type){
       case "walk":
-        const isMovementValid = map.isMovementValid({ position: this.position, direction: this.direction })
+        const isMovementValid = (map.checkSpace({ 
+          position: getNextPosition(this.position, this.direction)
+        }) === undefined)
         
         if (!isMovementValid) {
           behavior.retry && setTimeout(() => {
@@ -26,8 +28,13 @@ export default class Character extends GameEntity {
           return
         }
 
-        map.moveWall({ position: this.position, direction: this.direction })
         this.movementProgress = 0
+        map.moveWall({ 
+          position: this.position, 
+          direction: this.direction,
+          entity: this 
+        })
+        
         break
 
       case "stand":
@@ -39,18 +46,17 @@ export default class Character extends GameEntity {
   }
 
   update({ currentInput, map }) {
-    const validInput = currentInput !== undefined
     const isCharacterMoving = this.movementProgress < this.movementLimit
-
+    
     if (isCharacterMoving) {
       this.updatePosition()
     
-    } else if (validInput && this.isBeingControlled && !map.isCutscenePlaying){
+    } else if (currentInput.direction && this.isBeingControlled && !map.isCutscenePlaying){
       this.startBehavior({
-        behavior: { type: "walk", direction: currentInput },
+        behavior: { type: "walk", direction: currentInput.direction },
         map
       })
-    }
+    } 
     
     this.updateSprite()
   }

@@ -18,7 +18,13 @@ export const characters = {
       new Behavior({ type: "stand", direction: "left", time: 3000 }),
       new Behavior({ type: "stand", direction: "right", time: 2000 }),
       new Behavior({ type: "stand", direction: "down", time: 3000 }),
-    ]
+    ],
+    events: {
+      dialogue: [
+        new Behavior({ type: "dialogue", text: "1" }),
+        new Behavior({ type: "dialogue", text: "2" }),
+      ]
+    }
   }),
 
   npc2: new Character({

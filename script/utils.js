@@ -39,7 +39,7 @@ export const directionMapping = {
 export const CUSTOM_EVENTS = Object.freeze({
   FINISHED_MOVING: "FinishedMoving",
   FINISHED_STANDING: "FinishedStanding",
-  PLAYER_CONFIRM: "PlayerConfirm",
+  PLAYER_INTERACT: "PlayerInteract",
 })
 
 export function emitEvent(event, payload) {

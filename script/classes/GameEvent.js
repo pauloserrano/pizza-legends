@@ -49,12 +49,12 @@ export default class GameEvent {
     message.init()
 
     const eventHandler = () => {
-      document.removeEventListener(CUSTOM_EVENTS.PLAYER_CONFIRM, eventHandler)
+      document.removeEventListener(CUSTOM_EVENTS.PLAYER_INTERACT, eventHandler)
       message.close()
       resolve()
     }    
     
-    document.addEventListener(CUSTOM_EVENTS.PLAYER_CONFIRM, eventHandler)
+    document.addEventListener(CUSTOM_EVENTS.PLAYER_INTERACT, eventHandler)
   }
 
   run() {
