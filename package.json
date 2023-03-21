@@ -1,0 +1,34 @@
+{
+  "name": "pizza-legends",
+  "version": "1.0.0",
+  "description": "A browser RPG game I made while learning POO and watching Drew Conley's tutorials.",
+  "dependencies": {
+    "buffer-from": "^1.1.2",
+    "esbuild": "^0.17.10",
+    "get-tsconfig": "^4.4.0",
+    "source-map": "^0.6.1",
+    "source-map-support": "^0.5.21",
+    "tsx": "^3.12.3"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.4.2",
+    "typescript": "^5.0.2",
+    "webpack": "^5.76.2",
+    "webpack-cli": "^5.0.1"
+  },
+  "scripts": {
+    "dev": "webpack --watch",
+    "build": "webpack"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/pauloserrano/pizza-legends.git"
+  },
+  "keywords": [],
+  "author": "Paulo Serrano",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/pauloserrano/pizza-legends/issues"
+  },
+  "homepage": "https://github.com/pauloserrano/pizza-legends#readme"
+}

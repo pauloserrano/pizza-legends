@@ -1,4 +1,4 @@
-import Overworld from "./classes/Overworld.js"
+import Overworld from "./classes/Overworld"
 
 function run() {
   const overworld = new Overworld();
