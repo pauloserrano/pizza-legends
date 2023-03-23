@@ -1,1 +1,4 @@
-console.log("It works!!")
+import { Overworld } from "./classes/Overworld";
+
+const overworld = new Overworld()
+overworld.init()
